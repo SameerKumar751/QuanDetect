@@ -1,247 +1,916 @@
 # QuanDetect
-### Hybrid Quantum-Classical Machine Learning Platform for Early Disease Detection
-*Built for Smart India Hackathon — Problem Statement SIH26139*
 
-QuanDetect fuses classical machine learning (Random Forest, XGBoost, SVM) with a
-genuine **Variational Quantum Classifier (VQC)**, built with **PennyLane + PyTorch**
-and simulated on PennyLane's `default.qubit` device, to detect disease risk early
-and transparently. Classical and quantum models are trained on identical data
-splits and benchmarked side-by-side (accuracy, sensitivity, specificity,
-precision, F1-score), with SHAP-based explainability and Low/Medium/High risk
-stratification for clinical decision support.
+### Hybrid Quantum-Classical Machine Learning Platform for Explainable Disease Detection
 
-A **Breast Cancer Wisconsin (Diagnostic)** sample dataset ships out of the box —
-but the entire pipeline (upload → preprocessing → feature selection → training →
-prediction) is dataset-agnostic. Drop in any tabular biomedical CSV (real
-hospital records, genomics panels, etc.) with a binary/categorical outcome
-column and it works the same way.
+QuanDetect is a research-oriented platform developed for **Smart India Hackathon — Problem Statement SIH26139**. It combines classical machine learning, quantum machine learning, deep learning, medical imaging, and explainable AI into a unified platform for early disease-risk analysis.
+
+The platform currently provides two complementary pipelines:
+
+- **Tabular Disease Detection** for structured biomedical datasets
+- **CT Lung Diagnostics** for medical imaging analysis
 
 ---
 
-## 1. Project Structure
+## Overview
 
+QuanDetect is designed to provide a common environment for developing, evaluating, comparing, and explaining classical, quantum, and hybrid machine learning approaches.
+
+### Core Capabilities
+
+- Biomedical tabular dataset analysis
+- Lung CT image analysis
+- Classical machine learning
+- Variational Quantum Classification
+- Hybrid quantum-classical learning
+- Deep learning with ResNet-18
+- Model benchmarking
+- SHAP-based tabular explainability
+- Grad-CAM imaging explainability
+- Probability-based risk stratification
+- Interactive analytical dashboard
+
+The platform is intended for **research, education, and hackathon demonstration** rather than clinical diagnosis.
+
+---
+
+## System Architecture
+
+```text
+                               QuanDetect
+                                   │
+                    ┌──────────────┴──────────────┐
+                    │                             │
+                    ▼                             ▼
+             Tabular Pipeline              CT Imaging Pipeline
+                    │                             │
+                    ▼                             ▼
+          Biomedical CSV Data              CT / PNG Imaging
+                    │                             │
+                    ▼                             ▼
+           Data Preprocessing             Image Preprocessing
+                    │                             │
+                    ▼                             ▼
+          Feature Selection + PCA          ROI Processing
+                    │                             │
+          ┌─────────┴─────────┐          ┌────────┴─────────┐
+          │                   │          │                  │
+          ▼                   ▼          ▼                  ▼
+   Classical Models          VQC     ResNet-18             VQC
+   RF / XGBoost / SVM         │        CNN                  │
+          │                   │          │                  │
+          │                   │          └────────┬─────────┘
+          │                   │                   ▼
+          │                   │          Hybrid Quantum-CNN
+          │                   │                   │
+          └──────────┬────────┘                   │
+                     │                            │
+                     ▼                            ▼
+              Model Evaluation            Grad-CAM Explanation
+                     │                            │
+                     └─────────────┬──────────────┘
+                                   ▼
+                           Prediction & Risk
+                                   │
+                                   ▼
+                         Interactive Dashboard
 ```
+
+---
+
+# 1. Tabular Disease Detection
+
+The tabular pipeline accepts structured biomedical CSV datasets and applies a complete machine-learning workflow.
+
+```text
+Dataset Upload
+      ↓
+Target Detection
+      ↓
+Data Cleaning
+      ↓
+Missing Value Handling
+      ↓
+Feature Scaling
+      ↓
+Feature Selection
+      ↓
+PCA
+      ↓
+ ┌────┴─────────────┐
+ │                  │
+ ▼                  ▼
+Classical ML       Quantum ML
+ │                  │
+ ├─ Random Forest   └─ VQC
+ ├─ XGBoost
+ └─ SVM
+ │                  │
+ └────────┬─────────┘
+          ▼
+    Model Comparison
+          ↓
+Prediction + Probability
+          ↓
+Risk Stratification
+          ↓
+SHAP Explainability
+```
+
+## Classical Models
+
+### Random Forest
+
+An ensemble of decision trees used as a robust classical classification baseline.
+
+### XGBoost
+
+A gradient-boosted decision-tree model used for high-performance tabular classification.
+
+### Support Vector Machine
+
+A margin-based classification algorithm used as an additional classical benchmark.
+
+All classical models operate on the same prepared dataset so their results can be compared consistently.
+
+---
+
+# 2. Quantum Machine Learning
+
+QuanDetect includes a **Variational Quantum Classifier (VQC)** implemented using **PennyLane and PyTorch**.
+
+The quantum workflow uses classical preprocessing before sending compact feature representations into the quantum circuit.
+
+```text
+Biomedical Features
+        ↓
+Preprocessing
+        ↓
+Feature Selection
+        ↓
+PCA
+        ↓
+Angle Encoding
+        ↓
+Variational Quantum Circuit
+        ↓
+Quantum Measurements
+        ↓
+Classical Prediction Head
+        ↓
+Disease Probability
+```
+
+### Quantum Components
+
+- PennyLane
+- PyTorch
+- `default.qubit`
+- Angle embedding
+- Variational quantum layers
+- Strongly entangling layers
+- Pauli-Z expectation measurements
+- Classical output layer
+
+The current implementation uses a **quantum simulator** and does not require physical quantum hardware.
+
+### Why PCA Before the Quantum Circuit?
+
+Quantum simulation becomes increasingly expensive as the number of qubits increases. PCA is therefore used to reduce the feature space to a compact representation suitable for the selected quantum circuit size.
+
+For example, a four-qubit configuration has:
+
+```text
+2^4 = 16
+```
+
+computational basis states in simulation.
+
+---
+
+# 3. Medical Imaging — CT Lung Diagnostics
+
+QuanDetect includes a dedicated medical-imaging module for lung CT analysis.
+
+The dashboard provides an independent imaging workflow alongside the tabular ML pipeline.
+
+```text
+CT Image
+   ↓
+Image Preprocessing
+   ↓
+Lung / ROI Processing
+   ↓
+Feature Preparation
+   ↓
+Model Inference
+   ↓
+Prediction
+   ↓
+Explainability
+   ↓
+Benchmarking
+```
+
+## Imaging Workflow
+
+The CT Lung Diagnostics interface supports:
+
+- Curated clinical sample scans
+- Custom CT upload workflow
+- CT image inspection
+- Lung-region / ROI processing
+- Original CT visualization
+- Segmented ROI visualization
+- Grad-CAM heatmap visualization
+- Model probability visualization
+- Risk visualization
+- Comparative model evaluation
+
+The demonstration workflow includes **Normal, Benign, and Malignant** classes.
+
+---
+
+# 4. Imaging Models
+
+## ResNet-18 — 2D CNN
+
+A ResNet-18 based convolutional neural network is used as the classical deep-learning baseline for CT image classification.
+
+```text
+CT Image
+   ↓
+Preprocessing
+   ↓
+ResNet-18
+   ↓
+Classification
+   ↓
+Normal / Benign / Malignant
+```
+
+## Variational Quantum Classifier — Imaging
+
+The imaging pipeline also includes a quantum classification workflow based on extracted image features.
+
+```text
+CT Image
+   ↓
+Feature Extraction
+   ↓
+Compact Feature Representation
+   ↓
+Quantum Encoding
+   ↓
+Variational Quantum Circuit
+   ↓
+Quantum Measurement
+   ↓
+Classification
+```
+
+## Hybrid Quantum-CNN
+
+The Hybrid Quantum-CNN combines classical image feature extraction with a quantum classification component.
+
+```text
+CT Image
+   ↓
+CNN Feature Extraction
+   ↓
+Compact Feature Representation
+   ↓
+Quantum Encoding
+   ↓
+Variational Quantum Circuit
+   ↓
+Quantum Measurements
+   ↓
+Classification Head
+   ↓
+Prediction
+```
+
+This architecture allows the project to investigate how quantum components can be integrated into a conventional medical-imaging pipeline.
+
+---
+
+# 5. Explainable AI
+
+Explainability is an important part of QuanDetect.
+
+## SHAP — Tabular Pipeline
+
+SHAP is used to analyze feature contributions to model predictions.
+
+It provides an interpretable view of which input features contribute to an individual prediction or model output.
+
+## Grad-CAM — CT Imaging
+
+Grad-CAM is used to generate visual activation heatmaps for imaging predictions.
+
+The imaging dashboard provides:
+
+```text
+Original CT
+     ↓
+Model Prediction
+     ↓
+Grad-CAM
+     ↓
+Visual Heatmap
+```
+
+Grad-CAM is treated as a model-interpretability mechanism. It is **not** a substitute for clinical image interpretation, definitive lesion segmentation, or radiological diagnosis.
+
+---
+
+# 6. Risk Stratification
+
+QuanDetect provides probability-based risk visualization for demonstration purposes.
+
+| Risk Level | Demonstration Probability |
+|------------|---------------------------|
+| Low | < 30% |
+| Medium | 30% – 64.9% |
+| High | ≥ 65% |
+
+These thresholds are **demonstration values only** and are not validated clinical diagnostic thresholds.
+
+---
+
+# 7. Model Evaluation
+
+QuanDetect provides comparative evaluation across classical, quantum, and hybrid approaches.
+
+## Tabular Metrics
+
+- Accuracy
+- Sensitivity / Recall
+- Specificity
+- Precision
+- F1-score
+
+## Imaging Metrics
+
+- Accuracy
+- Sensitivity / Recall
+- Specificity
+- Precision
+- F1-score
+- ROC-AUC
+- Inference latency
+- Confusion matrix
+
+Model results depend on the selected dataset, preprocessing configuration, train/test partition, model parameters, and execution environment.
+
+---
+
+# 8. Technology Stack
+
+## Backend
+
+- Python
+- FastAPI
+- Pandas
+- NumPy
+- scikit-learn
+- XGBoost
+- PyTorch
+- PennyLane
+- SHAP
+- Torchvision
+- OpenCV
+- Pillow
+
+## Frontend
+
+- React
+- Vite
+- Tailwind CSS
+- Recharts
+- Framer Motion
+- GSAP
+- Lucide React
+
+## Machine Learning
+
+- Random Forest
+- XGBoost
+- Support Vector Machine
+- PCA
+- ANOVA F-test
+- ResNet-18
+- Variational Quantum Classifier
+- Hybrid Quantum-CNN
+
+## Explainability
+
+- SHAP
+- Grad-CAM
+
+---
+
+# 9. Project Structure
+
+```text
 QuanDetect/
-├── backend/                     # FastAPI application
-│   ├── main.py                  # App entrypoint (mounts /api and /api/imaging)
+│
+├── README.md
+├── .gitignore
+│
+├── backend/
+│   ├── main.py
 │   ├── requirements.txt
-│   ├── data/
-│   │   └── sample_breast_cancer.csv   # Bundled demo dataset
-│   ├── sessions/                # Per-upload session cache (auto-created)
-│   ├── app/                     # Tabular Pipeline (isolated)
-│   │   ├── config.py            # Central configuration
-│   │   ├── schemas.py           # Pydantic request/response models
-│   │   ├── preprocessing.py     # Module 1: cleaning, imputation, scaling,
-│   │   │                        #   feature selection, PCA for quantum encoding
+│   │
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── preprocessing.py
+│   │   ├── schemas.py
+│   │   │
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   │
 │   │   ├── models/
-│   │   │   ├── classical.py     # Random Forest / XGBoost / SVM baselines
-│   │   │   └── quantum.py       # Module 2 & 3: Hybrid VQC (PennyLane + PyTorch)
-│   │   ├── utils/
-│   │   │   ├── data_utils.py    # Session store
-│   │   │   └── risk.py          # Module 4: risk stratification & decision support
-│   │   └── api/
-│   │       └── routes.py        # All REST endpoints (/api/*)
-│   └── imaging/                 # Dedicated Medical Imaging Pipeline (CT Scans)
-│       ├── config.py            # CT windowing, resolutions, VQC hyperparams
-│       ├── schemas.py           # Pydantic models for imaging API
-│       ├── preprocessing.py     # DICOM/PNG ingestion, HU windowing, lung segmentation & ROI
-│       ├── feature_extraction.py# Pretrained ResNet-18 visual embeddings & PCA reduction
-│       ├── models/
-│       │   ├── classical_cnn.py # 2D ResNet-18 lung lesion classifier
-│       │   ├── quantum_imaging.py # PennyLane VQC on extracted CT features
-│       │   └── hybrid_imaging.py# Hybrid Quantum-CNN (HQ-CNN) fusion
-│       ├── explainability/
-│       │   └── gradcam.py       # Grad-CAM attention heatmaps over CT lung parenchyma
-│       ├── evaluation.py        # Multi-model benchmarking (Acc, Sens, Spec, F1, ROC-AUC)
-│       ├── data/
-│       │   └── sample_ct_scans/ # Curated Normal, Benign, and Malignant CT slices
-│       └── api/
-│           └── routes.py        # Dedicated imaging endpoints (/api/imaging/*)
+│   │   │   ├── __init__.py
+│   │   │   ├── classical.py
+│   │   │   └── quantum.py
+│   │   │
+│   │   └── utils/
+│   │       ├── __init__.py
+│   │       ├── data_utils.py
+│   │       └── risk.py
+│   │
+│   ├── data/
+│   │   ├── sample_breast_cancer.csv
+│   │   └── survey_lung_cancer.csv
+│   │
+│   ├── imaging/
+│   │   ├── __init__.py
+│   │   ├── config.py
+│   │   ├── preprocessing.py
+│   │   ├── feature_extraction.py
+│   │   ├── evaluation.py
+│   │   │
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   │
+│   │   ├── models/
+│   │   │   ├── __init__.py
+│   │   │   ├── classical_cnn.py
+│   │   │   ├── quantum_imaging.py
+│   │   │   └── hybrid_imaging.py
+│   │   │
+│   │   ├── explainability/
+│   │   │   ├── __init__.py
+│   │   │   └── gradcam.py
+│   │   │
+│   │   └── data/
+│   │       ├── generate_samples.py
+│   │       └── sample_ct_scans/
+│   │
+│   ├── test_imaging_pipeline.py
+│   └── test_lung_cancer_tabular.py
 │
-├── frontend/                    # React + Vite application
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js       # "Soft Clinical + Quantum" theme
-│   ├── index.html
-│   └── src/
-│       ├── App.jsx              # Routes + layout
-│       ├── main.jsx
-│       ├── index.css
-│       ├── lib/
-│       │   ├── api.js           # Axios client / API endpoint map
-│       │   ├── utils.js         # cn(), formatters, risk color helpers
-│       │   └── AppStateContext.jsx  # Shared session state across pages
-│       ├── components/
-│       │   ├── Sidebar.jsx      # Modern nav with GSAP animation
-│       │   ├── StatCard.jsx
-│       │   └── ui/              # shadcn-style Button, Card, Badge, Input, etc.
-│       └── pages/
-│           ├── Landing.jsx      # 1. Overview
-│           ├── Upload.jsx       # 2. Dataset Upload
-│           ├── Training.jsx     # 3. Model Training (classical + quantum)
-│           ├── Prediction.jsx   # 4. Prediction
-│           ├── Comparison.jsx   # 5. Comparison Dashboard
-│           └── Results.jsx      # 6. Risk Stratification + SHAP Explainability
-│
-└── README.md                    # You are here
+└── frontend/
+    ├── package.json
+    ├── package-lock.json
+    ├── vite.config.js
+    ├── tailwind.config.js
+    ├── postcss.config.js
+    ├── index.html
+    │
+    └── src/
+        ├── App.jsx
+        ├── main.jsx
+        ├── index.css
+        │
+        ├── components/
+        │   ├── Sidebar.jsx
+        │   ├── StatCard.jsx
+        │   └── ui/
+        │
+        ├── lib/
+        │   ├── api.js
+        │   ├── imagingApi.js
+        │   ├── utils.js
+        │   └── AppStateContext.jsx
+        │
+        └── pages/
+            ├── Landing.jsx
+            ├── Upload.jsx
+            ├── Training.jsx
+            ├── Prediction.jsx
+            ├── Comparison.jsx
+            ├── Results.jsx
+            │
+            └── imaging/
+                └── ImagingDashboard.jsx
 ```
 
 ---
 
-## 2. Tech Stack
+# 10. Installation
 
-**Backend:** FastAPI · PennyLane · PyTorch · scikit-learn · XGBoost · Pandas · NumPy · SHAP
-**Frontend:** React + Vite · Tailwind CSS · shadcn/ui-style components · GSAP · Recharts · Framer Motion · Lucide React
+## Prerequisites
 
----
+- Python 3.12
+- Node.js 18+
+- npm
+- Git
 
-## 3. Prerequisites
-
-- Python 3.10–3.11 (PennyLane/PyTorch compatibility)
-- Node.js 18+ and npm
-- ~2 GB free disk space for Python ML dependencies (PyTorch, XGBoost)
+Python dependencies should be installed inside a virtual environment.
 
 ---
 
-## 4. Backend Setup
+## Backend Setup
+
+From the project root:
 
 ```bash
 cd backend
-
-# Create and activate a virtual environment
-python3 -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the API (auto-reload for development)
-uvicorn main:app --reload --port 8000
 ```
 
-The API will be live at **http://localhost:8000**, with interactive Swagger docs
-at **http://localhost:8000/docs**.
+Create a Python virtual environment:
 
-### Key endpoints
+```bash
+python3.12 -m venv venv
+```
 
-| Method | Endpoint                     | Purpose                                            |
-|--------|-------------------------------|-----------------------------------------------------|
-| POST   | `/api/upload`                 | Upload a CSV (or omit file to load the sample set) |
-| POST   | `/api/preprocess`              | Clean, impute, scale, select features               |
-| POST   | `/api/train/classical`         | Train Random Forest / XGBoost / SVM                 |
-| POST   | `/api/train/quantum`           | Train the Hybrid VQC on `default.qubit`             |
-| POST   | `/api/predict`                 | Predict disease probability + risk tier for a sample |
-| GET    | `/api/compare/{session_id}`    | Benchmark all trained models                         |
-| POST   | `/api/explain`                 | SHAP explanation for a classical model's prediction  |
-| GET    | `/api/sample-dataset-info`     | Metadata about the bundled demo dataset               |
+Activate it on macOS / Linux:
 
-### Medical Imaging (CT) Endpoints
+```bash
+source venv/bin/activate
+```
 
-| Method | Endpoint                     | Purpose                                            |
-|--------|-------------------------------|-----------------------------------------------------|
-| GET    | `/api/imaging/samples`        | List curated clinical CT scan cases (Normal/Benign/Malignant) |
-| POST   | `/api/imaging/upload`         | Ingest CT scan (DICOM/PNG/JPG) or select sample ID  |
-| POST   | `/api/imaging/predict`        | Multi-model inference (ResNet-18 CNN, VQC, Hybrid)  |
-| POST   | `/api/imaging/explain/gradcam`| Compute localized Grad-CAM attention heatmap overlay|
-| GET    | `/api/imaging/compare`        | Benchmark imaging models across clinical metrics    |
+Install backend dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start the backend:
+
+```bash
+python -m uvicorn main:app --reload --port 8000
+```
+
+Backend:
+
+```text
+http://localhost:8000
+```
+
+FastAPI documentation:
+
+```text
+http://localhost:8000/docs
+```
 
 ---
 
-## 5. Frontend Setup
+## Frontend Setup
+
+Open a second terminal:
 
 ```bash
 cd frontend
+```
 
+Install dependencies:
+
+```bash
 npm install
+```
 
-# Optional: copy .env.example -> .env and set VITE_API_BASE_URL if the
-# backend is not running on http://localhost:8000
-cp .env.example .env
+Start the development server:
 
+```bash
 npm run dev
 ```
 
-The app will be live at **http://localhost:5173**. In development, Vite proxies
-all `/api/*` requests to `http://localhost:8000` (see `vite.config.js`), so no
-extra configuration is needed if both servers run locally on their default ports.
+Frontend:
 
-To build for production:
+```text
+http://localhost:5173
+```
+
+For LAN/network-accessible development:
 
 ```bash
-npm run build
-npm run preview
+npm run dev -- --host 0.0.0.0
 ```
 
 ---
 
-## 6. Using the Platform
+# 11. Environment Configuration
 
-1. **Overview** — Landing page explaining the 4-stage pipeline.
-2. **Dataset Upload** — Drag & drop a CSV, or click "Use Demo Dataset" to load
-   the bundled Breast Cancer Wisconsin data instantly. Pick the target/label
-   column and how many top features to keep (ANOVA F-test), then run
-   preprocessing.
-3. **Model Training** — Train the classical baselines (Random Forest, XGBoost,
-   SVM) and the Hybrid VQC (configurable epochs & entangling layers) on the
-   PennyLane `default.qubit` simulator. Live loss curve and circuit diagram
-   are shown for the quantum model.
-4. **Prediction** — Enter feature values (or prefill from a sample row),
-   choose a trained model (including the quantum VQC), and get a disease
-   probability, risk tier, and the top contributing features.
-5. **Comparison Dashboard** — Bar chart and radar chart benchmarking every
-   trained model across Accuracy, Sensitivity, Specificity, Precision, and
-   F1-score, plus a "best model" badge.
-6. **Risk Stratification & Explainability** — Legend for the Low / Medium /
-   High risk tiers, pipeline completion tracker, and a SHAP-based
-   bar chart explaining any test-set prediction from a classical model.
+Environment-specific configuration should remain local and must not contain credentials in the repository.
 
----
+Where environment configuration is required, use the provided example file:
 
-## 7. Swapping in a Different Dataset
+```text
+frontend/.env.example
+```
 
-The pipeline never hard-codes column names. To use your own biomedical CSV:
+Create the corresponding local environment file:
 
-1. Go to **Dataset Upload** and upload the file instead of using the demo set.
-2. The backend auto-detects a likely target column (`target`, `label`,
-   `diagnosis`, `class`, `outcome`, or the last column if it looks
-   categorical) — or you can pick any column manually from the dropdown.
-3. Non-numeric / ID-like columns are automatically dropped during
-   preprocessing; missing values are imputed; features are scaled and reduced
-   via ANOVA F-test + PCA (for the quantum circuit) automatically.
-4. Proceed to **Model Training** as usual — no code changes required.
+```text
+frontend/.env
+```
+
+Do not commit:
+
+- API keys
+- Access tokens
+- Passwords
+- Private keys
+- Cloud credentials
+- Database credentials
+- Other sensitive configuration
+
+The repository `.gitignore` files exclude local environment files, virtual environments, runtime sessions, build output, and development artifacts.
 
 ---
 
-## 8. Notes on the Quantum Model
+# 12. API
 
-- Uses PennyLane's `default.qubit` simulator, as required.
-- Classical PCA-reduced features (angle-encoded into `[0, π]`) are embedded via
-  `qml.AngleEmbedding`, followed by `qml.StronglyEntanglingLayers`
-  (the variational ansatz), with Pauli-Z expectation values read out per qubit.
-- A small classical linear + sigmoid head converts the quantum expectation
-  values into a calibrated disease probability — this classical-quantum
-  coupling, combined with the classical PCA pre-processing stage, is what
-  makes the architecture "hybrid."
-- Qubit count defaults to 4 (configurable in `backend/app/config.py` via
-  `N_QUBITS`) to keep the simulator responsive; increase for more expressive
-  circuits at the cost of training speed.
+## Tabular Pipeline
+
+```text
+POST /api/upload
+POST /api/preprocess
+POST /api/train/classical
+POST /api/train/quantum
+POST /api/predict
+GET  /api/compare/{session_id}
+POST /api/explain
+GET  /api/sample-dataset-info
+```
+
+## Imaging Pipeline
+
+The imaging module exposes dedicated routes for:
+
+- CT image processing
+- Image inference
+- Model evaluation
+- Explainability
+- Imaging workflow operations
+
+The exact route implementation is maintained within:
+
+```text
+backend/imaging/api/routes.py
+```
 
 ---
 
-## 9. Error Handling & Robustness
+# 13. Usage
 
-- Upload endpoint validates CSV parseability and non-empty datasets.
-- Preprocessing validates the requested target column exists.
-- Training/prediction endpoints check that prerequisite steps
-  (preprocessing → training) have been completed for the active session and
-  return clear `4xx` errors with descriptive messages if not.
-- The frontend surfaces all backend errors inline with contextual guidance
-  (e.g. "Train the classical model first via Model Training").
+## Tabular Pipeline
+
+```text
+1. Upload a biomedical CSV dataset
+2. Select or detect the target column
+3. Preprocess the dataset
+4. Select relevant features
+5. Train classical models
+6. Train the quantum classifier
+7. Generate predictions
+8. Compare model performance
+9. Inspect SHAP explanations
+10. View probability and risk stratification
+```
+
+## CT Lung Diagnostics
+
+```text
+1. Open CT Lung Diagnostics
+2. Select a curated CT sample or upload a supported CT image
+3. Inspect the CT scan
+4. Process the lung region / ROI
+5. Run the available imaging models
+6. Compare CNN, VQC and Hybrid outputs
+7. Review prediction probabilities
+8. Inspect Grad-CAM visualization
+9. Review imaging benchmark metrics
+```
 
 ---
 
-## 10. Disclaimer
+# 14. Sample Data
 
-QuanDetect is a research/education platform built for a hackathon
-demonstration. It is **not** a certified medical device and should not be
-used for real clinical diagnosis without proper regulatory validation.
+The repository includes demonstration data for development and evaluation.
+
+### Tabular Samples
+
+```text
+backend/data/sample_breast_cancer.csv
+backend/data/survey_lung_cancer.csv
+```
+
+### Imaging Samples
+
+```text
+backend/imaging/data/sample_ct_scans/
+```
+
+The included sample data is intended for demonstration and development.
+
+For research or real-world use, datasets should be independently validated, appropriately licensed, and processed according to applicable privacy and data-governance requirements.
+
+---
+
+# 15. Reproducibility and Version Control
+
+Backend dependency versions are maintained in:
+
+```text
+backend/requirements.txt
+```
+
+Frontend dependency versions are locked through:
+
+```text
+frontend/package-lock.json
+```
+
+Git is used to track source-code changes.
+
+Recommended workflow:
+
+```bash
+git status
+git add .
+git commit -m "Describe the change"
+git push
+```
+
+Stable project milestones can be tagged:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+This allows future versions of the project to be tracked without losing previous stable states.
+
+---
+
+# 16. Testing
+
+The backend includes pipeline-level test files for the major workflows:
+
+```text
+backend/test_imaging_pipeline.py
+backend/test_lung_cancer_tabular.py
+```
+
+Tests can be executed from the backend environment using the project's configured Python test tooling.
+
+---
+
+# 17. Limitations
+
+## Medical Limitations
+
+- QuanDetect is not a certified medical device.
+- Model predictions are not medical diagnoses.
+- Demonstration risk thresholds are not validated clinical thresholds.
+- Predictions depend on the dataset and model configuration.
+- A single 2D CT slice does not represent complete patient-level clinical information.
+- Cancer staging cannot be reliably inferred without appropriate staging labels and clinical information.
+- Grad-CAM outputs are model-interpretability visualizations and not clinical evidence.
+
+## Machine Learning Limitations
+
+- Model performance depends on dataset quality and representativeness.
+- Small or biased datasets can produce unreliable evaluation results.
+- Metrics depend on train/test partitioning and preprocessing.
+- Accuracy alone does not establish clinical usefulness.
+- Quantum simulation results should not be interpreted as equivalent to execution on physical quantum hardware.
+
+## Computational Limitations
+
+- Quantum circuit simulation becomes increasingly expensive as qubit count increases.
+- Deep-learning inference and training can require significant computational resources.
+- Larger CT datasets require additional storage and processing infrastructure.
+
+---
+
+# 18. Responsible Use
+
+> **QuanDetect is a research, educational, and Smart India Hackathon demonstration project. It is not a certified medical device and must not be used to diagnose, treat, or make clinical decisions about any individual. Model predictions, probability scores, risk levels, and visual explanations are experimental outputs and require appropriate clinical validation, regulatory review, and expert interpretation before any real-world medical application.**
+
+---
+
+# 19. Smart India Hackathon
+
+**Problem Statement:** SIH26139
+
+QuanDetect explores the use of hybrid quantum-classical machine learning for early and explainable disease detection.
+
+The project brings together:
+
+```text
+Classical Machine Learning
+          +
+Deep Learning
+          +
+Quantum Machine Learning
+          +
+Medical Imaging
+          +
+Explainable AI
+          +
+Model Benchmarking
+```
+
+within a single research-oriented platform.
+
+---
+
+# 20. Future Scope
+
+Potential extensions include:
+
+- Execution on real quantum hardware
+- Larger and more diverse biomedical datasets
+- 3D CT volume analysis
+- Advanced DICOM processing
+- Improved lung segmentation
+- Additional quantum architectures
+- Transformer-based medical imaging models
+- Automated hyperparameter optimization
+- Independent external validation
+- Probability calibration
+- Cloud-based distributed training
+- Model monitoring and drift detection
+- Secure production-grade deployment
+- Privacy-preserving learning approaches
+
+---
+
+# 21. Project Status
+
+## Tabular Pipeline
+
+- [x] Dataset upload
+- [x] Automated target detection
+- [x] Data preprocessing
+- [x] Missing-value handling
+- [x] Feature selection
+- [x] PCA
+- [x] Random Forest
+- [x] XGBoost
+- [x] SVM
+- [x] Variational Quantum Classifier
+- [x] Model comparison
+- [x] Risk stratification
+- [x] SHAP explainability
+
+## Medical Imaging Pipeline
+
+- [x] CT Lung Diagnostics dashboard
+- [x] Curated CT sample scans
+- [x] Custom CT upload workflow
+- [x] CT inspection
+- [x] Lung / ROI processing
+- [x] ResNet-18 2D CNN
+- [x] Imaging VQC
+- [x] Hybrid Quantum-CNN
+- [x] Grad-CAM explainability
+- [x] Normal / Benign / Malignant workflow
+- [x] Imaging model benchmarking
+- [x] Confusion matrix visualization
+- [x] Probability and risk visualization
+
+---
+
+# 22. License
+
+This project is developed as a research and educational prototype for **Smart India Hackathon**.
+
+Before redistribution, commercial use, or deployment with external datasets, verify the applicable licenses and usage requirements of all third-party libraries, datasets, pretrained models, and external resources used by the project.
+
+---
+
+## Acknowledgements
+
+QuanDetect is built using open-source technologies including:
+
+- FastAPI
+- PyTorch
+- PennyLane
+- scikit-learn
+- XGBoost
+- SHAP
+- Torchvision
+- React
+- Vite
+- Tailwind CSS
+
+The project also uses publicly available datasets and research resources where applicable.
