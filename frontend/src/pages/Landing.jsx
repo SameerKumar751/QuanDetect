@@ -80,15 +80,25 @@ export default function Landing() {
   return (
     <div ref={heroRef} className="space-y-16">
       {/* Hero */}
+      
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary-50 via-white to-accent-50 border border-border px-6 sm:px-12 py-16 sm:py-20">
         <div className="orb-1 absolute -top-10 -right-10 h-56 w-56 rounded-full bg-accent-200/30 blur-3xl" />
         <div className="orb-2 absolute bottom-0 left-0 h-64 w-64 rounded-full bg-primary-200/30 blur-3xl" />
+        
 
         <div className="relative max-w-3xl">
           <div className="hero-badge inline-flex items-center gap-2 rounded-full bg-white border border-border px-4 py-1.5 shadow-soft mb-6">
             <Sparkles className="h-3.5 w-3.5 text-accent-500" />
             <span className="text-xs font-medium text-warmgray-600">Smart India Hackathon &middot; SIH26139</span>
           </div>
+
+          <div className="mb-4 max-w-2xl rounded-lg border border-amber-200 bg-amber-50 px-3.5 py-2.5">
+  <p className="text-xs leading-relaxed text-amber-800">
+    <span className="font-semibold">Demo Note:</span>{" "}
+    Some platform features may be unavailable due to backend deployment
+    and server connectivity limitations in the current demo environment.
+  </p>
+</div>
 
           <h1 className="hero-title text-4xl sm:text-5xl font-extrabold tracking-tight text-warmgray-900 leading-[1.1]">
             Hybrid Quantum-Classical
@@ -115,6 +125,7 @@ export default function Landing() {
               </Button>
             </Link>
           </div>
+
         </div>
       </section>
 
